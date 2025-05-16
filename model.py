@@ -594,16 +594,29 @@ class MyModel(AIxBlockMLBase):
                 gc.collect()
                 torch.cuda.empty_cache()
 
-                result = {
-                    "model_version": model_id,
-                    "result": {
-                        "format": format,
-                        "image": img_base64,
-                        "image_url": generated_url,
-                    },
-                }
+                # result = {
+                #     "model_version": model_id,
+                #     "result": {
+                #         "format": format,
+                #         "image": img_base64,
+                #         "image_url": generated_url,
+                #     },
+                # }
 
-                return {"message": "predict completed successfully", "result": result}
+                predictions.append({
+                    'result': [{
+                        'from_name': "generated_text",
+                        'to_name': "text_output",
+                        'type': 'textarea',
+                        'value': {
+                            'text': [img_base64],
+                            "generated_url": generated_url
+                        }
+                    }],
+                    'model_version': ""
+                })
+
+                return {"message": "predict completed successfully", "result": predictions}
 
             except Exception as e:
                 print(e)
